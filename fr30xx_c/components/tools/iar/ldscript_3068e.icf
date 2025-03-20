@@ -1,0 +1,36 @@
+/*###ICF### Section handled by ICF editor, don't touch! ****/
+/*-Editor annotation file-*/
+/* IcfEditorFile="$TOOLKIT_DIR$\config\ide\IcfEditor\cortex_v1_0.xml" */
+/*-Specials-*/
+define symbol __ICFEDIT_intvec_start__ = 0x08002000;
+/*-Memory Regions-*/
+define symbol __ICFEDIT_region_ROM_start__          = 0x08002000;
+define symbol __ICFEDIT_region_ROM_end__            = 0x081fffff;
+define symbol __ICFEDIT_region_PRAM_start__         = 0x1ffe0000;
+define symbol __ICFEDIT_region_PRAM_end__           = 0x1fffffff;
+define symbol __ICFEDIT_region_RAM_start__          = 0x20000000;
+define symbol __ICFEDIT_region_RAM_end__            = 0x2007ffff;
+/*-Sizes-*/
+define symbol __ICFEDIT_size_cstack__ = 0x1000;
+/**** End of ICF editor section. ###ICF###*/
+
+define memory mem with size = 4G;
+define region ROM_region        = mem:[from __ICFEDIT_region_ROM_start__        to __ICFEDIT_region_ROM_end__];
+define region PRAM_region       = mem:[from __ICFEDIT_region_PRAM_start__       to __ICFEDIT_region_PRAM_end__];
+define region RAM_region        = mem:[from __ICFEDIT_region_RAM_start__        to __ICFEDIT_region_RAM_end__];
+
+define block CSTACK    with alignment = 8, size = __ICFEDIT_size_cstack__   { };
+
+initialize by copy { readwrite, section .textrw};
+initialize by copy { readwrite, section ram_code_front};
+
+place at address mem:__ICFEDIT_intvec_start__ { readonly section .intvec };
+
+place in ROM_region         { readonly };
+place in PRAM_region        { 
+    block PRAM_CODE_FRONT_BLOCK {
+        section ram_code_front,
+        section .textrw
+    }
+};
+place in RAM_region         { readwrite, block CSTACK };
