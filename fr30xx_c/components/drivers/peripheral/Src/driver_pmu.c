@@ -500,6 +500,14 @@ uint8_t pmu_get_pin_value(enum_PMU_PINx_t bit)
         return false;
 }
 
+uint16_t pmu_get_gpios_value(enum_PMU_PINx_t bits)
+{
+    uint8_t data_reg = PMU_REG_PIN_DATA;
+    uint16_t ret = 0;
+    ret = ool_read16(data_reg) & bits;
+    return ret;
+}
+
 void pmu_set_pin_xor_en(enum_PMU_PINx_t bits, bool en)
 {
     uint8_t xor_reg = PMU_REG_PIN_XOR_EN;
@@ -685,7 +693,7 @@ __WEAK void PMU_IWDT_IRQhandler(void)
 void pmu_irq(void)
 {
     uint16_t state_map = pmu_get_isr_state();
-//    printf("%s state%d \r\n",__func__,state_map);
+    printf("%s state %d \r\n",__func__,state_map);
 //    pmu_clear_isr_state(state_map);
 
     if (state_map & PMU_BATFULL_INT_STATUS_BIT) {

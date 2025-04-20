@@ -645,6 +645,7 @@ uint8_t pmu_get_pin_value(enum_PMU_PINx_t bit);
 void pmu_port_wakeup_func_set(enum_PMU_PINx_t bits);
 void pmu_port_wakeup_func_clear(enum_PMU_PINx_t bits);
 void pmu_gpio_int_init(enum_PMU_PINx_t bits, enum_PMU_GPIO_PULL_t pull, uint8_t init_value);
+uint16_t pmu_get_gpios_value(enum_PMU_PINx_t bits);
 
 void pmu_enable_isr(uint16_t isr_map);
 void pmu_disable_isr(uint16_t isr_map);
